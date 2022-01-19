@@ -1,0 +1,21 @@
+{
+    "debug": true,
+    "server": {
+      "address": ":8080"
+    },
+    "context":{
+      "timeout":2
+    },
+    "database": {
+        "driver": "mysql",
+        "host": "127.0.0.1",
+        "port": "3306",
+        "username": "root",
+        "password": "qwerty123",
+        "name": "db_sirclo_api"
+    },
+    "jwt" : {
+      "secret" : "supersecret12345!@#$%",
+      "expired" : 1
+    }
+  }
