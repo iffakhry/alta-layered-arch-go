@@ -2,7 +2,6 @@ package auth
 
 import (
 	"database/sql"
-	"fmt"
 	"net/http"
 	_middlewares "sirclo/restapi/layered/delivery/middlewares"
 	_entity "sirclo/restapi/layered/entity"
@@ -17,9 +16,9 @@ func New(db *sql.DB) *AuthRepository {
 }
 
 func (ar *AuthRepository) Login(username string, password string) (string, int) {
-	query := fmt.Sprintf("SELECT id, password FROM users WHERE name='%v'", username)
+	// query := fmt.Sprintf("SELECT id, password FROM users WHERE name='%v'", username)
 
-	result, err := ar.db.Query(query)
+	result, err := ar.db.Query("SELECT id, password FROM users WHERE name= ?", username)
 
 	if err != nil {
 		return "get user failed", http.StatusInternalServerError

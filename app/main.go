@@ -3,7 +3,7 @@ package main
 import (
 	"log"
 
-	_config "sirclo/restapi/layered/config"
+	_config "sirclo/restapi/layered/app/config"
 	_middlewares "sirclo/restapi/layered/delivery/middlewares"
 	_routes "sirclo/restapi/layered/delivery/routes"
 	_util "sirclo/restapi/layered/util"
@@ -20,7 +20,11 @@ import (
 )
 
 func init() {
-	viper.SetConfigFile(`./config/config.json`)
+	viper.SetConfigName("config")  // name of config file (without extension)
+	viper.SetConfigType("json")    // REQUIRED if the config file does not have the extension in the name
+	viper.AddConfigPath("config/") // path to look for the config file in
+	// viper.AddConfigPath("$HOME/.appname") // call multiple times to add many search paths
+	viper.AddConfigPath("./app/config/") // optionally look for config in the working directory
 	err := viper.ReadInConfig()
 	if err != nil {
 		panic(err)
