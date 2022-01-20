@@ -65,19 +65,19 @@ func (ur *UserRepository) Get(id int) (entity.User, error) {
 }
 
 func (ur *UserRepository) Create(user entity.User) (int, error) {
-	query := fmt.Sprintf("INSERT INTO users (name, email, password, address) VALUES ('%v','%v','%v','%v')", user.Name, user.Email, user.Password, user.Address)
+	query := fmt.Sprintf("INSERT INTO users (name, email, password, address) VALUES ('%v','%v','%v','%v')", user.Name, user.Email, user.Password, user.Address.String)
 	id := 0
 
 	if _, err := ur.db.Exec(query); err != nil {
-
+		fmt.Println("err exec", err)
 		return 0, err
 	}
 
-	query = fmt.Sprintf("SELECT id FROM users WHERE name='%v' AND email='%v' AND password='%v' AND address='%v' ORDER BY id DESC LIMIT 1", user.Name, user.Email, user.Password, user.Address)
+	query = fmt.Sprintf("SELECT id FROM users WHERE name='%v' AND email='%v' AND password='%v' AND address='%v' ORDER BY id DESC LIMIT 1", user.Name, user.Email, user.Password, user.Address.String)
 
-	result, _ := ur.db.Query(query)
+	result, err := ur.db.Query(query)
 	defer result.Close()
-
+	fmt.Println("err query", err)
 	if result.Next() {
 		result.Scan(&id)
 	}
@@ -86,7 +86,7 @@ func (ur *UserRepository) Create(user entity.User) (int, error) {
 }
 
 func (ur *UserRepository) Update(user entity.User) (int, error) {
-	query := fmt.Sprintf("UPDATE users SET name='%v', email='%v', address='%v' WHERE id=%v", user.Name, user.Email, user.Address, user.Id)
+	query := fmt.Sprintf("UPDATE users SET name='%v', email='%v', address='%v' WHERE id=%v", user.Name, user.Email, user.Address.String, user.Id)
 
 	result, err := ur.db.Exec(query)
 

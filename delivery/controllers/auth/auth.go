@@ -29,7 +29,7 @@ func (a AuthController) Login() echo.HandlerFunc {
 			// return c.JSON(code, common.SimpleResponse(code, "binding failed", ""))
 		}
 
-		token, code := a.repository.Login(*login.Name, *login.Password)
+		token, code := a.repository.Login(login.Name, login.Password)
 
 		if code != http.StatusOK {
 			return _controllers.NewErrorResponse(c, code, token)

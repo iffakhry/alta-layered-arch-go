@@ -44,7 +44,7 @@ func (ar *AuthRepository) Login(username string, password string) (string, int) 
 	notMatched := true
 
 	for i := 0; i < len(eligibles) && notMatched; i++ {
-		if *eligibles[i].Password == password {
+		if eligibles[i].Password == password {
 			notMatched = false
 			user.Id = eligibles[i].Id
 			user.Name = eligibles[i].Name
@@ -55,7 +55,7 @@ func (ar *AuthRepository) Login(username string, password string) (string, int) 
 		return "password incorrect", http.StatusUnauthorized
 	}
 
-	token, err := _middlewares.CreateToken(user.Id, *user.Name)
+	token, err := _middlewares.CreateToken(user.Id, user.Name)
 
 	if err != nil {
 		return "token creation failed", http.StatusInternalServerError

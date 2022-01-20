@@ -4,7 +4,6 @@ import (
 	"net/http"
 	_controllers "sirclo/restapi/layered/delivery/controllers"
 	_middlewares "sirclo/restapi/layered/delivery/middlewares"
-	_entity "sirclo/restapi/layered/entity"
 	_userRepo "sirclo/restapi/layered/repository/user"
 	"strconv"
 
@@ -92,17 +91,17 @@ func (uc UserController) Get() echo.HandlerFunc {
 
 func (uc UserController) Create() echo.HandlerFunc {
 	return func(c echo.Context) error {
-		user := _entity.User{}
-		// userRequest := UserRequestFormat{}
+		// user := _entity.User{}
+		userRequest := UserRequestFormat{}
 		// code := http.StatusOK
 
-		if err := c.Bind(&user); err != nil {
+		if err := c.Bind(&userRequest); err != nil {
 			return _controllers.NewErrorResponse(c, http.StatusBadRequest, "invalid data request")
 			// code = http.StatusBadRequest
 			// return c.JSON(code, common.SimpleResponse(code, "binding failed", nil))
 		}
 
-		id, err := uc.repository.Create(user)
+		_, err := uc.repository.Create(*userRequest.ToEntity())
 
 		if err != nil {
 			return _controllers.NewErrorResponse(c, http.StatusInternalServerError, "failed to create new user")
@@ -110,8 +109,8 @@ func (uc UserController) Create() echo.HandlerFunc {
 			// return c.JSON(code, common.SimpleResponse(code, "create user failed", nil))
 		}
 
-		user.Id = id
-		return _controllers.NewSuccessResponse(c, "success create users", user)
+		// userRequest.Id = id
+		return _controllers.NewSuccessResponse(c, "success create users", userRequest)
 		// return c.JSON(code, common.SimpleResponse(code, "create user success", []_entity.User{user}))
 	}
 }
@@ -151,7 +150,7 @@ func (uc UserController) Update() echo.HandlerFunc {
 			// return c.JSON(code, common.SimpleResponse(code, err.Error(), nil))
 		}
 
-		return _controllers.NewSuccessResponse(c, "update user success", userData)
+		return _controllers.NewSuccessResponse(c, "update user success", FromEntity(*userData))
 		// return c.JSON(code, common.SimpleResponse(code, "update user success", []_entity.User{user}))
 	}
 }
